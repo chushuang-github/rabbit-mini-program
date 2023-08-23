@@ -18,7 +18,7 @@ const { safeAreaInsets } = uni.getSystemInfoSync()
   </view>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 /* 自定义导航条 */
 .navbar {
   background-image: url(@/static/images/navigator_bg.png);

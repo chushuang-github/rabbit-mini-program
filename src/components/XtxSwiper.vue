@@ -41,9 +41,6 @@ const onChange: UniHelper.SwiperOnChange = (event) => {
   display: block;
   height: 280rpx;
 }
-</style>
-
-<style lang="scss" scoped>
 /* 轮播图 */
 .carousel {
   height: 100%;

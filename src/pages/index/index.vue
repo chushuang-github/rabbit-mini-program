@@ -5,13 +5,16 @@ import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
 import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '@/services/home'
+import { useGuessList } from '@/hooks'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/component'
 
 // 变量
 const bannerList = ref<BannerItem[]>([])
 const categoryList = ref<CategoryItem[]>([])
 const hotList = ref<HotItem[]>([])
+
+// 上拉加载hooks函数
+const { guessRef, onScrolltolower } = useGuessList()
 
 // 生命周期
 onLoad(() => {
@@ -36,12 +39,6 @@ const getHomeCategoryData = async () => {
 const getHomeHotData = async () => {
   const res = await getHomeHotAPI()
   hotList.value = res.result
-}
-
-// 上拉加载
-const guessRef = ref<XtxGuessInstance>()
-const onScrolltolower = () => {
-  guessRef.value?.getMore()
 }
 
 // 下拉刷新

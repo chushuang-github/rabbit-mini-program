@@ -36,7 +36,7 @@ const loginSuccess = (profile: LoginResult) => {
   const memberStore = useMemberStore()
   memberStore.setProfile(profile)
   // 成功提示
-  uni.showToast({ icon: 'success', title: '登录成功' })
+  uni.showToast({ icon: 'none', title: '登录成功' })
   setTimeout(() => {
     // 页面跳转
     uni.switchTab({ url: '/pages/my/my' })

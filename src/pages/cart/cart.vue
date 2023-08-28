@@ -1,11 +1,8 @@
-<script setup lang="ts">
-//
-</script>
-
+<!-- 静态数据演示版本 适合任何后端 -->
 <template>
-  <view class="cart">cart</view>
+  <view> cart </view>
 </template>
 
-<style lang="scss">
-//
-</style>
+<script setup lang="ts"></script>
+
+<style lang="scss" scoped></style>

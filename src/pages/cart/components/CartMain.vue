@@ -12,9 +12,15 @@ import {
 import type { CartItem } from '@/types/cart'
 import type { InputNumberBoxEvent } from '@/components/vk-data-input-number-box/vk-data-input-number-box'
 
+// 获取屏幕边界到安全区域距离
+const { safeAreaInsets } = uni.getSystemInfoSync()
 const memberStore = useMemberStore()
 const { guessRef, onScrolltolower } = useGuessList()
 const cartList = ref<CartItem[]>([])
+
+defineProps<{
+  type?: boolean
+}>()
 
 // 计算全选状态
 const isSelectedAll = computed(() => {
@@ -106,7 +112,12 @@ const gotoPayment = () => {
 </script>
 
 <template>
-  <scroll-view scroll-y class="scroll-view" @scrolltolower="onScrolltolower">
+  <scroll-view
+    scroll-y
+    class="scroll-view"
+    :style="{ paddingBottom: type ? safeAreaInsets?.bottom + 'px' : 0 }"
+    @scrolltolower="onScrolltolower"
+  >
     <!-- 已登录: 显示购物车 -->
     <template v-if="memberStore.profile">
       <!-- 购物车列表 -->
@@ -169,7 +180,7 @@ const gotoPayment = () => {
         </navigator>
       </view>
       <!-- 吸底工具栏 -->
-      <view class="toolbar">
+      <view class="toolbar" :style="{ bottom: type ? safeAreaInsets?.bottom + 'px' : 0 }">
         <text class="all" :class="{ checked: isSelectedAll }" @tap="onChangeSelectedAll">全选</text>
         <text class="text">合计:</text>
         <text class="amount">{{ selectedCartListMoney }}</text>
@@ -183,6 +194,12 @@ const gotoPayment = () => {
           </view>
         </view>
       </view>
+      <!-- placeholder -->
+      <view
+        v-if="type"
+        class="placeholder"
+        :style="{ height: safeAreaInsets?.bottom + 'px' }"
+      ></view>
     </template>
     <!-- 未登录: 提示登录 -->
     <view class="login-blank" v-else>
@@ -413,7 +430,6 @@ const gotoPayment = () => {
   display: flex;
   align-items: center;
   border-top: 1rpx solid #ededed;
-  border-bottom: 1rpx solid #ededed;
   background-color: #fff;
 
   .all {
@@ -484,6 +500,14 @@ const gotoPayment = () => {
       }
     }
   }
+}
+.placeholder {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  z-index: 999;
 }
 // 底部占位空盒子
 .toolbar-height {

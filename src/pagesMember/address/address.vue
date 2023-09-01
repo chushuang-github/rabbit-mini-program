@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { getMemberAddressAPI, deleteMemberAddressByIdAPI } from '@/services/address'
+import { useAddressStore } from '@/stores/modules/address'
 import type { AddressItem } from '@/types/goods'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const addressList = ref<AddressItem[]>([])
+const addressStore = useAddressStore()
 
 // 生命周期
 onShow(() => {
@@ -32,6 +34,12 @@ const onDeleteAddress = (id: string) => {
     },
   })
 }
+
+// 修改地址
+const onChangeAddress = (item: AddressItem) => {
+  addressStore.changeSelectedAddress(item)
+  uni.navigateBack()
+}
 </script>
 
 <template>
@@ -42,7 +50,7 @@ const onDeleteAddress = (id: string) => {
         <uni-swipe-action class="address-list">
           <!-- 收货地址项 -->
           <uni-swipe-action-item class="item" v-for="item in addressList" :key="item.id">
-            <view class="item-content">
+            <view class="item-content" @tap="onChangeAddress(item)">
               <view class="user">
                 {{ item.receiver }}
                 <text class="contact">{{ item.contact }}</text>
@@ -53,6 +61,7 @@ const onDeleteAddress = (id: string) => {
                 class="edit"
                 hover-class="none"
                 :url="`/pagesMember/address-form/address-form?id=${item.id}`"
+                @tap.stop="() => {}"
               >
                 修改
               </navigator>

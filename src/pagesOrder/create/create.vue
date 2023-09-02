@@ -2,13 +2,19 @@
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { useAddressStore } from '@/stores/modules/address'
-import { getMemberOrderPreAPI, getMemberOrderPreNowAPI, postMemberOrderAPI } from '@/services/order'
+import {
+  getMemberOrderPreAPI,
+  getMemberOrderPreNowAPI,
+  getMemberOrderRepurchaseByIdAPI,
+  postMemberOrderAPI,
+} from '@/services/order'
 import type { OrderPreResult } from '@/types/order'
 
 // 页面参数
 const query = defineProps<{
   skuId?: string
   count?: string
+  orderId?: string
 }>()
 
 // 获取屏幕边界到安全区域距离
@@ -47,9 +53,15 @@ const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
 // 订单
 const getMemberOrderPreData = async () => {
   if (query.count && query.skuId) {
+    // 商品详情进入订单
     const res = await getMemberOrderPreNowAPI({ skuId: query.skuId, count: query.count })
     orderPre.value = res.result
+  } else if (query.orderId) {
+    // 订单详情 - 再次购买进入订单
+    const res = await getMemberOrderRepurchaseByIdAPI(query.orderId)
+    orderPre.value = res.result
   } else {
+    // 购物车进入订单
     const res = await getMemberOrderPreAPI()
     orderPre.value = res.result
   }
